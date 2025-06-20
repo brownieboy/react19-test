@@ -1,21 +1,29 @@
 // src/App.tsx
-import { Routes, Route, Link } from "react-router-dom";
-import UseOptimisticPage from "./features/UseOptimisticPage";
+import { Routes, Route, Link } from 'react-router-dom';
+import UseOptimisticPage from './features/UseOptimisticPage.jsx';
+
+function HomePage() {
+  return (
+    <div>
+      <h2>Welcome</h2>
+      <p>Select a React 19 feature to explore:</p>
+      <ul>
+        <li>
+          <Link to='/use-optimistic'>useOptimistic</Link>
+        </li>
+        {/* Add more links here */}
+      </ul>
+    </div>
+  );
+}
 
 function App() {
   return (
     <div>
       <h1>React 19 Feature Demos</h1>
-      <nav>
-        <ul>
-          <li><Link to="/use-optimistic">useOptimistic</Link></li>
-          {/* More links can go here */}
-        </ul>
-      </nav>
-
       <Routes>
-        <Route path="/use-optimistic" element={<UseOptimisticPage />} />
-        {/* Add more routes as needed */}
+        <Route path='/' element={<HomePage />} />
+        <Route path='/use-optimistic' element={<UseOptimisticPage />} />
       </Routes>
     </div>
   );
