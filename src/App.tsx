@@ -1,6 +1,6 @@
 // src/App.tsx
 import { Routes, Route, Link } from 'react-router-dom';
-import UseOptimisticPage from './features/UseOptimisticPage.jsx';
+import UseOptimisticPage from './features/UseOptimisticPage';
 
 function HomePage() {
   return (
