@@ -1,10 +1,11 @@
-import { useOptimistic, useState, useRef, startTransition } from "react";
-import { deliverMessage } from "./actions.js";
+import { useOptimistic, useState, useRef, startTransition } from 'react';
+import { deliverMessage } from './actions.js';
+import { Breadcrumbs } from '../components/Breadcrumbs.jsx';
 
 function Thread({ messages, sendMessageAction }) {
   const formRef = useRef();
   function formAction(formData) {
-    addOptimisticMessage(formData.get("message"));
+    addOptimisticMessage(formData.get('message'));
     formRef.current.reset();
     startTransition(async () => {
       await sendMessageAction(formData);
@@ -15,7 +16,7 @@ function Thread({ messages, sendMessageAction }) {
     (state, newMessage) => [
       {
         text: newMessage,
-        sending: true
+        sending: true,
       },
       ...state,
     ]
@@ -24,8 +25,8 @@ function Thread({ messages, sendMessageAction }) {
   return (
     <>
       <form action={formAction} ref={formRef}>
-        <input type="text" name="message" placeholder="Hello!" />
-        <button type="submit">Send</button>
+        <input type='text' name='message' placeholder='Hello!' />
+        <button type='submit'>Send</button>
       </form>
       {optimisticMessages.map((message, index) => (
         <div key={index}>
@@ -33,20 +34,24 @@ function Thread({ messages, sendMessageAction }) {
           {!!message.sending && <small> (Sending...)</small>}
         </div>
       ))}
-
     </>
   );
 }
 
 export default function App() {
   const [messages, setMessages] = useState([
-    { text: "Hello there!", sending: false, key: 1 }
+    { text: 'Hello there!', sending: false, key: 1 },
   ]);
   async function sendMessageAction(formData) {
-    const sentMessage = await deliverMessage(formData.get("message"));
+    const sentMessage = await deliverMessage(formData.get('message'));
     startTransition(() => {
       setMessages((messages) => [{ text: sentMessage }, ...messages]);
-    })
+    });
   }
-  return <Thread messages={messages} sendMessageAction={sendMessageAction} />;
+  return (
+    <>
+      <Breadcrumbs />
+      <Thread messages={messages} sendMessageAction={sendMessageAction} />
+    </>
+  );
 }
