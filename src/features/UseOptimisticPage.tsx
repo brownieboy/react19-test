@@ -1,6 +1,6 @@
-import { useOptimistic, useState, useRef, startTransition } from 'react';
-import { deliverMessage } from './actions';
-import { Breadcrumbs } from '../components/Breadcrumbs.jsx';
+import { useOptimistic, useState, useRef, startTransition } from "react";
+import { deliverMessage } from "./actions";
+import { Breadcrumbs } from "../components/Breadcrumbs.jsx";
 
 type Message = {
   text: string;
@@ -12,12 +12,12 @@ type ThreadProps = {
   sendMessageAction: (formData: FormData) => void;
 };
 
-function Thread({ messages, sendMessageAction }: ThreadProps) {
+const Thread = ({ messages, sendMessageAction }: ThreadProps) => {
   const formRef = useRef<HTMLFormElement>(null);
 
-  function formAction(formData: FormData) {
-    const message = formData.get('message');
-    if (typeof message !== 'string') {
+  const formAction = (formData: FormData) => {
+    const message = formData.get("message");
+    if (typeof message !== "string") {
       return;
     }
     addOptimisticMessage(message);
@@ -25,7 +25,7 @@ function Thread({ messages, sendMessageAction }: ThreadProps) {
     startTransition(async () => {
       await sendMessageAction(formData);
     });
-  }
+  };
 
   const [optimisticMessages, addOptimisticMessage] = useOptimistic<
     Message[],
@@ -41,8 +41,8 @@ function Thread({ messages, sendMessageAction }: ThreadProps) {
   return (
     <>
       <form action={formAction} ref={formRef}>
-        <input type='text' name='message' placeholder='Hello!' />
-        <button type='submit'>Send</button>
+        <input type="text" name="message" placeholder="Hello!" />
+        <button type="submit">Send</button>
       </form>
       {optimisticMessages.map((message, index) => (
         <div key={index}>
@@ -52,21 +52,23 @@ function Thread({ messages, sendMessageAction }: ThreadProps) {
       ))}
     </>
   );
-}
+};
 
-export default function App() {
+export default function UseOptimisticPage() {
   const [messages, setMessages] = useState<Message[]>([
-    { text: 'Hello there!', sending: false },
+    { text: "Hello there!", sending: false },
   ]);
-  async function sendMessageAction(formData: FormData) {
-    const raw = formData.get('message');
-    if (typeof raw !== 'string') return;
+
+  const sendMessageAction = async (formData: FormData) => {
+    const raw = formData.get("message");
+    if (typeof raw !== "string") return;
 
     const sentMessage = await deliverMessage(raw);
     startTransition(() => {
       setMessages((messages) => [{ text: sentMessage }, ...messages]);
     });
-  }
+  };
+
   return (
     <>
       <Breadcrumbs />
